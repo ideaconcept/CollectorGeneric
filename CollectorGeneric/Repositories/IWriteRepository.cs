@@ -1,4 +1,5 @@
 ﻿using CollectorGeneric.Entities;
+using CollectorGeneric.Repositories;
 
 namespace CollectorGeneric.Repositories
 {

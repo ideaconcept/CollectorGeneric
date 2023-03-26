@@ -18,8 +18,8 @@ static void AddCoins(IWriteRepository<Coins> coinsRepository)
 
 static void AddBanknotes(IWriteRepository<Banknotes> banknotesRepository)
 {
-    banknotesRepository.Add(new Banknotes { Symbol = "Symbol2", Name = "Nazwa 2", Denomination = 12.00f, Currency = "Złotych", YearOfRelease = 1998, Length = 15, Width = 7.5f, Watermark = "Znak wodny"});
-
+    banknotesRepository.Add(new Banknotes { Symbol = "Symbol2", Name = "Nazwa 2", Denomination = 20.00f, Currency = "Złotych", YearOfRelease = 1998, Length = 15, Width = 7.5f, Watermark = "Znak wodny"});
+    banknotesRepository.Add(new Banknotes { Symbol = "Symbol3", Name = "Nazwa 3", Denomination = 50.00f, Currency = "Złotych", YearOfRelease = 2022, Length = 15, Width = 7.5f, Watermark = "Brak" });
 
     banknotesRepository.Save();
 }
