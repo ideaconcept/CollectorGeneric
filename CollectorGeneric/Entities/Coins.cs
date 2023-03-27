@@ -6,6 +6,6 @@
         public float Diameter { get; set; }
         public float Weight { get; set; }
 
-        public override string ToString() => base.ToString() + $"Material: {Material}, Diameter: {Diameter}, Weight: {Weight} g";
+        public override string ToString() => base.ToString() + $"Material: {Material}, Diameter: {Diameter}, Weight: {Weight} g (Moneta)";
     }
 }
