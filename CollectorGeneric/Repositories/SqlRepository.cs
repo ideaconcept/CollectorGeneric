@@ -8,17 +8,14 @@ namespace CollectorGeneric.Repositories
     {
         private readonly DbSet<T> _dbSet;
         private readonly DbContext _dbContext;
-        private readonly Action<T>? _itemEventCallback;
 
-        public SqlRepository(DbContext dbContext, Action<T>? itemEventCalback = null)
+        public event EventHandler<T>? ItemAdded, ItemRemove;
+        
+        public SqlRepository(DbContext dbContext)
         {
             _dbContext = dbContext;
             _dbSet = _dbContext.Set<T>();
-            _itemEventCallback = itemEventCalback;
-        }
-
-        public event EventHandler<T>? ItemAdded;
-        public event EventHandler<T>? ItemRemove;
+        }      
 
         public IEnumerable<T> GetAll()
         {

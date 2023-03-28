@@ -20,6 +20,7 @@ namespace CollectorGeneric
                 Console.ResetColor();
                 SaveLogToFile($"[{System.DateTime.Now}]; NumismaticsAdded; [{e.Symbol} {e.Name} {e.Denomination} {e.Currency}]");
             }
+
             static void RepositoryOnItemRemove(object? sender, Numismatics e)
             {
                 Console.ForegroundColor = ConsoleColor.DarkRed;
@@ -57,7 +58,7 @@ namespace CollectorGeneric
                         var yearOfRelease = GetDataFromUser("Rok wydania: ");
                         var material = GetDataFromUser("Materiał: ");
                         var diameter = GetDataFromUser("Średnica: ");
-                        var weight = GetDataFromUser("Waga: ");
+                        var weight = GetDataFromUser("Waga (g): ");
                         Console.ResetColor();
 
                         denomination = denomination.Replace(".", ",");
@@ -105,12 +106,23 @@ namespace CollectorGeneric
                 }
                 else if (choice == "3")
                 {
+                    ShowMenu();
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine("\nZawartość Twojej kolekcji:\n");
+                    Console.ResetColor();
+                    WriteAllToConsole(numismaticsRepository);
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine("\nPodaj numer Id numizmatu, który chcesz usunąć z kolekcji:\n");
+
                     try
                     {
+                        Console.ResetColor();var symbol = GetDataFromUser("ID: ");
+                        numismaticsRepository.Remove(numismaticsRepository.GetById((int)float.Parse(symbol)));
+                        numismaticsRepository.Save();
                     }
                     catch (Exception e)
                     {
-                        ShowBug(e.Message);
+                        ShowBug("Wprowadzono złą wartość identyfikatora Id.\n");
                     }
                 }
                 else if (choice == "4")
@@ -118,7 +130,7 @@ namespace CollectorGeneric
                     try
                     {
                         Console.ForegroundColor = ConsoleColor.Green;
-                        Console.WriteLine("\nW Twojej kolekcji generycznej znajdują się następujące numizmaty:\n");
+                        Console.WriteLine("\nW Twojej kolekcji 'generycznej' znajdują się następujące numizmaty:\n");
                         Console.ResetColor();
                         WriteAllToConsole(numismaticsRepository);
                     }
@@ -178,7 +190,7 @@ namespace CollectorGeneric
         {
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.Blue;
-            Console.WriteLine("          Witamy w programie Kolekcjoner 'Generic' (InFile):");
+            Console.WriteLine("          Witamy w programie Kolekcjoner 'Generic' (InMemory):");
             Console.ForegroundColor = ConsoleColor.DarkGray;
             Console.WriteLine("====================================================================");
             Console.ResetColor();
