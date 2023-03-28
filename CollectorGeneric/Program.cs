@@ -6,16 +6,34 @@ namespace CollectorGeneric
 {
     internal class Program
     {
+        private const string fileName = "auditLog.txt";
         private static void Main()
         {
             var numismaticsRepository = new SqlRepository<Numismatics>(new CollectorGenericDbContext());
-            
+            numismaticsRepository.ItemAdded += RepositoryOnItemAdded;
+            numismaticsRepository.ItemRemove += RepositoryOnItemRemove;
+
+            static void RepositoryOnItemAdded(object? sender, Numismatics e)
+            {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
+                Console.WriteLine($"\nDodano numizmat: {e.Symbol} {e.Name} {e.Denomination} {e.Currency} from {sender?.GetType().Name}");
+                Console.ResetColor();
+                SaveLogToFile($"[{System.DateTime.Now}]; NumismaticsAdded; [{e.Symbol} {e.Name} {e.Denomination} {e.Currency}]");
+            }
+            static void RepositoryOnItemRemove(object? sender, Numismatics e)
+            {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
+                Console.WriteLine($"\nUsunięto numizmat: {e.Symbol} {e.Name} {e.Denomination} {e.Currency} from {sender?.GetType().Name}");
+                Console.ResetColor();
+                SaveLogToFile($"[{System.DateTime.Now}]; NumismaticsRemove; [{e.Symbol} {e.Name} {e.Denomination} {e.Currency}]");
+            }
+
             ShowMenu();
 
             while (true)
             {
                 Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.Write("\nWybierz 1, 2, 3 lub X aby zakończyć pracę programu. Twój wybór: ");
+                Console.Write("\nWybierz 1, 2, 3, 4, 5, 6 lub X aby zakończyć pracę programu. Twój wybór: ");
                 Console.ResetColor();
 
                 Console.ForegroundColor = ConsoleColor.Green;
@@ -89,10 +107,40 @@ namespace CollectorGeneric
                 {
                     try
                     {
+                    }
+                    catch (Exception e)
+                    {
+                        ShowBug(e.Message);
+                    }
+                }
+                else if (choice == "4")
+                {
+                    try
+                    {
                         Console.ForegroundColor = ConsoleColor.Green;
                         Console.WriteLine("\nW Twojej kolekcji generycznej znajdują się następujące numizmaty:\n");
                         Console.ResetColor();
                         WriteAllToConsole(numismaticsRepository);
+                    }
+                    catch (Exception e)
+                    {
+                        ShowBug(e.Message);
+                    }
+                }
+                else if (choice == "5")
+                {
+                    try
+                    {
+                    }
+                    catch (Exception e)
+                    {
+                        ShowBug(e.Message);
+                    }
+                }
+                else if (choice == "6")
+                {
+                    try
+                    {
                     }
                     catch (Exception e)
                     {
@@ -130,13 +178,16 @@ namespace CollectorGeneric
         {
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.Blue;
-            Console.WriteLine("             Witamy w programie Kolekcjoner Generic:");
+            Console.WriteLine("          Witamy w programie Kolekcjoner 'Generic' (InFile):");
             Console.ForegroundColor = ConsoleColor.DarkGray;
             Console.WriteLine("====================================================================");
             Console.ResetColor();
             Console.WriteLine("   1. Dodawanie monety do kolekcji");
             Console.WriteLine("   2. Dodawanie banknotu do kolekcji");
-            Console.WriteLine("   3. Wyświetl zasób kolekcji");
+            Console.WriteLine("   3. Usunięcie numizmatu z kolekcji");
+            Console.WriteLine("   4. Wyświetl zasób kolekcji (repozytorium generyczne)");
+            Console.WriteLine("   5. Wyświetl zasób kolekcji (serializacja)");
+            Console.WriteLine("   6. Wyświetl zaartość plik audytu");
             Console.WriteLine("   X. Zakończ pracę programu");
             Console.ForegroundColor = ConsoleColor.DarkGray;
             Console.WriteLine("====================================================================");
@@ -150,6 +201,14 @@ namespace CollectorGeneric
             Console.ForegroundColor = ConsoleColor.Gray;
             string userInput = Console.ReadLine();
             return userInput;
+        }
+
+        private static void SaveLogToFile(string auditLog)
+        {
+            using (var writer = File.AppendText(fileName))
+            {
+                writer.WriteLine(auditLog);
+            }
         }
     }
 }
