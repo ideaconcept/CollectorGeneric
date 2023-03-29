@@ -9,7 +9,9 @@ namespace CollectorGeneric
         private const string fileName = "auditLog.txt";
         private static void Main()
         {
-            var numismaticsRepository = new SqlRepository<Numismatics>(new CollectorGenericDbContext());
+            //var numismaticsRepository = new SqlRepository<Numismatics>(new CollectorGenericDbContext());
+            var numismaticsRepository = new FileRepository<Numismatics>();
+            numismaticsRepository.LoadRepositiry();
             numismaticsRepository.ItemAdded += RepositoryOnItemAdded;
             numismaticsRepository.ItemRemove += RepositoryOnItemRemove;
 
