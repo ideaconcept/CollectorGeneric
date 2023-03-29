@@ -20,7 +20,7 @@ namespace CollectorGeneric
                 Console.ForegroundColor = ConsoleColor.DarkRed;
                 Console.WriteLine($"\nDodano numizmat: {e.Symbol} {e.Name} {e.Denomination} {e.Currency} from {sender?.GetType().Name}");
                 Console.ResetColor();
-                SaveLogToFile($"[{System.DateTime.Now}]; NumismaticsAdded; [{e.Symbol} {e.Name} {e.Denomination} {e.Currency}]");
+                SaveLogToFile($"{System.DateTime.Now};NumismaticsAdded;{e.Symbol}, {e.Name}, {e.Denomination}, {e.Currency}");
             }
 
             static void RepositoryOnItemRemove(object? sender, Numismatics e)
@@ -28,7 +28,7 @@ namespace CollectorGeneric
                 Console.ForegroundColor = ConsoleColor.DarkRed;
                 Console.WriteLine($"\nUsunięto numizmat: {e.Symbol} {e.Name} {e.Denomination} {e.Currency} from {sender?.GetType().Name}");
                 Console.ResetColor();
-                SaveLogToFile($"[{System.DateTime.Now}]; NumismaticsRemove; [{e.Symbol} {e.Name} {e.Denomination} {e.Currency}]");
+                SaveLogToFile($"{System.DateTime.Now};NumismaticsRemove;{e.Symbol}, {e.Name}, {e.Denomination}, {e.Currency}");
             }
 
             ShowMenu();
@@ -97,7 +97,7 @@ namespace CollectorGeneric
 
                         lenght = lenght.Replace(".", ",");
                         width = width.Replace(".", ",");
-                        
+
                         numismaticsRepository.Add(new Banknotes { Symbol = symbol, Name = name, Denomination = float.Parse(denomination), Currency = currency, YearOfRelease = float.Parse(yearOfRelease), Length = float.Parse(lenght), Width = float.Parse(width), Watermark = watermark });
                         numismaticsRepository.Save();
                     }
@@ -118,7 +118,7 @@ namespace CollectorGeneric
 
                     try
                     {
-                        Console.ResetColor();var symbol = GetDataFromUser("ID: ");
+                        Console.ResetColor(); var symbol = GetDataFromUser("ID: ");
                         numismaticsRepository.Remove(numismaticsRepository.GetById((int)float.Parse(symbol)));
                         numismaticsRepository.Save();
                     }
@@ -132,7 +132,8 @@ namespace CollectorGeneric
                     try
                     {
                         Console.ForegroundColor = ConsoleColor.Green;
-                        Console.WriteLine("\nW Twojej kolekcji 'generycznej' znajdują się następujące numizmaty:\n");
+                        Console.WriteLine("\n\tW Twojej kolekcji 'generycznej' znajdują się następujące numizmaty:\n");
+                        Console.WriteLine(("\t").PadRight(100, '-'));
                         Console.ResetColor();
                         WriteAllToConsole(numismaticsRepository);
                     }
@@ -153,8 +154,29 @@ namespace CollectorGeneric
                 }
                 else if (choice == "6")
                 {
+                    ShowMenu();
                     try
                     {
+                        if (File.Exists(Program.fileName))
+                        {
+                            using (var reader = File.OpenText(Program.fileName))
+                            {
+                                Console.ForegroundColor = ConsoleColor.Blue;
+                                Console.Write("\nZawartość pliku logów audytu:\n\n");
+                                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                                Console.WriteLine("\t{0,-20} {1,-20} {2,-20}", "Data", "Operacja", "Obiekt");
+                                Console.WriteLine(("\t").PadRight(100, '-'));
+                                Console.ResetColor();
+
+                                var line = reader.ReadLine();
+                                while (line != null)
+                                {
+                                    var record = line.Split(';');
+                                    Console.WriteLine("\t{0,-20} {1,-20} {2,-20}", record[0], record[1], record[2]);
+                                    line = reader.ReadLine();
+                                }
+                            }
+                        }
                     }
                     catch (Exception e)
                     {
@@ -180,7 +202,7 @@ namespace CollectorGeneric
                 Console.WriteLine(item);
             }
         }
-    
+
         private static void ShowBug(string bug)
         {
             Console.ForegroundColor = ConsoleColor.Red;
@@ -192,7 +214,7 @@ namespace CollectorGeneric
         {
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.Blue;
-            Console.WriteLine("          Witamy w programie Kolekcjoner 'Generic' (InMemory):");
+            Console.WriteLine("          Witamy w programie Kolekcjoner 'Generic' (InFile):");
             Console.ForegroundColor = ConsoleColor.DarkGray;
             Console.WriteLine("====================================================================");
             Console.ResetColor();
@@ -201,7 +223,7 @@ namespace CollectorGeneric
             Console.WriteLine("   3. Usunięcie numizmatu z kolekcji");
             Console.WriteLine("   4. Wyświetl zasób kolekcji (repozytorium generyczne)");
             Console.WriteLine("   5. Wyświetl zasób kolekcji (serializacja)");
-            Console.WriteLine("   6. Wyświetl zaartość plik audytu");
+            Console.WriteLine("   6. Wyświetl zawartość plik audytu");
             Console.WriteLine("   X. Zakończ pracę programu");
             Console.ForegroundColor = ConsoleColor.DarkGray;
             Console.WriteLine("====================================================================");
