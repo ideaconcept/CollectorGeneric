@@ -79,6 +79,7 @@ namespace CollectorGeneric.Repositories
                 for (int i = 0; i < itemCount; i++)
                 {
                     T item = items[i];
+                    Console.WriteLine(item.GetType().Name);
                     string jsonObj = JsonSerializer.Serialize<T>(item);
                     writer.WriteLine(jsonObj);
                 }

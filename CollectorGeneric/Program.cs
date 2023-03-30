@@ -70,6 +70,7 @@ namespace CollectorGeneric
 
                         numismaticsRepository.Add(new Coins { Symbol = symbol, Name = name, Denomination = float.Parse(denomination), Currency = currency, YearOfRelease = float.Parse(yearOfRelease), Material = material, Diameter = float.Parse(diameter), Weight = float.Parse(weight) });
                         numismaticsRepository.Save();
+
                     }
                     catch (Exception e)
                     {
