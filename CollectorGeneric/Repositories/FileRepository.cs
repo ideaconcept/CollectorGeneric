@@ -10,7 +10,7 @@ namespace CollectorGeneric.Repositories
 
         public event EventHandler<T>? ItemAdded, ItemRemove;
 
-        public void LoadRepositiry()
+        public void LoadRepository()
         {
             _items = ReadRepoFromFile<T>();
         }
@@ -40,7 +40,7 @@ namespace CollectorGeneric.Repositories
 
         public void Save()
         {
-            SaveRepoToFile<T>(_items); ;
+            SaveRepoToFile<T>(_items);
         }
 
         List<T> ReadRepoFromFile<T>()

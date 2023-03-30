@@ -7,11 +7,12 @@ namespace CollectorGeneric
     internal class Program
     {
         private const string fileName = "auditLog.txt";
+
         private static void Main()
         {
             //var numismaticsRepository = new SqlRepository<Numismatics>(new CollectorGenericDbContext());
             var numismaticsRepository = new FileRepository<Numismatics>();
-            numismaticsRepository.LoadRepositiry();
+            numismaticsRepository.LoadRepository();
             numismaticsRepository.ItemAdded += RepositoryOnItemAdded;
             numismaticsRepository.ItemRemove += RepositoryOnItemRemove;
 
@@ -36,7 +37,7 @@ namespace CollectorGeneric
             while (true)
             {
                 Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.Write("\nWybierz 1, 2, 3, 4, 5, 6 lub X aby zakończyć pracę programu. Twój wybór: ");
+                Console.Write("\nWybierz 1, 2, 3, 4, 5 lub X aby zakończyć pracę programu. Twój wybór: ");
                 Console.ResetColor();
 
                 Console.ForegroundColor = ConsoleColor.Green;
@@ -109,10 +110,7 @@ namespace CollectorGeneric
                 else if (choice == "3")
                 {
                     ShowMenu();
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    Console.WriteLine("\nZawartość Twojej kolekcji:\n");
-                    Console.ResetColor();
-                    WriteAllToConsole(numismaticsRepository);
+                    ShowRepo(numismaticsRepository);
                     Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine("\nPodaj numer Id numizmatu, który chcesz usunąć z kolekcji:\n");
 
@@ -131,9 +129,8 @@ namespace CollectorGeneric
                 {
                     try
                     {
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        Console.WriteLine("\n\tW Twojej kolekcji 'generycznej' znajdują się następujące numizmaty:\n");
-                        Console.WriteLine(("\t").PadRight(100, '-'));
+                        Console.ForegroundColor = ConsoleColor.Blue;
+                        Console.Write("\nZawartość Twojej kolekcji:\n\n");
                         Console.ResetColor();
                         WriteAllToConsole(numismaticsRepository);
                     }
@@ -143,16 +140,6 @@ namespace CollectorGeneric
                     }
                 }
                 else if (choice == "5")
-                {
-                    try
-                    {
-                    }
-                    catch (Exception e)
-                    {
-                        ShowBug(e.Message);
-                    }
-                }
-                else if (choice == "6")
                 {
                     ShowMenu();
                     try
@@ -203,6 +190,32 @@ namespace CollectorGeneric
             }
         }
 
+        static void ShowRepo(IReadRepository<Numismatics> repository)
+        {
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.Write("\nZawartość Twojej kolekcji:\n\n");
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.WriteLine("\t{0,-4} {1,-11} {2,-35} {3,7} {4,-10} {5,8}", "Id", "Symbol", "Nazwa", "Nominał", "Waluta", "Rok wyd.", "Średnica", "Waga (g)", "Materiał");
+            Console.WriteLine(("\t").PadRight(83, '-'));
+            Console.ResetColor();
+
+            var items = repository.GetAll();
+            foreach (var item in items)
+            {
+                Console.WriteLine("\t{0,-4} {1,-11} {2,-35} {3,7} {4,-10} {5,8}", item.Id, item.Symbol, item.Name, item.Denomination, item.Currency, item.YearOfRelease);
+
+                //<Coins> -> <Numismatics> + 
+                //material "Materiał"
+                //diameter "Średnica"
+                //weight "Waga"
+
+                //<Banknotes>  -> <Numismatics> +
+                //lenght "Długość"
+                //width "Wysokość"
+                //watermark "Znak wodny"
+            }
+        }
+
         private static void ShowBug(string bug)
         {
             Console.ForegroundColor = ConsoleColor.Red;
@@ -222,8 +235,7 @@ namespace CollectorGeneric
             Console.WriteLine("   2. Dodawanie banknotu do kolekcji");
             Console.WriteLine("   3. Usunięcie numizmatu z kolekcji");
             Console.WriteLine("   4. Wyświetl zasób kolekcji (repozytorium generyczne)");
-            Console.WriteLine("   5. Wyświetl zasób kolekcji (serializacja)");
-            Console.WriteLine("   6. Wyświetl zawartość plik audytu");
+            Console.WriteLine("   5. Wyświetl zawartość plik audytu");
             Console.WriteLine("   X. Zakończ pracę programu");
             Console.ForegroundColor = ConsoleColor.DarkGray;
             Console.WriteLine("====================================================================");
