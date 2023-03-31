@@ -11,25 +11,45 @@ namespace CollectorGeneric
         private static void Main()
         {
             //var numismaticsRepository = new SqlRepository<Numismatics>(new CollectorGenericDbContext());
-            var numismaticsRepository = new FileRepository<Numismatics>();
-            numismaticsRepository.LoadRepository();
-            numismaticsRepository.ItemAdded += RepositoryOnItemAdded;
-            numismaticsRepository.ItemRemove += RepositoryOnItemRemove;
+            var coinsRepository = new FileRepository<Coins>();
+            var banknotesRepository = new FileRepository<Banknotes>();
+            coinsRepository.LoadRepository();
+            banknotesRepository.LoadRepository();
+            coinsRepository.ItemAdded += RepositoryOnCoinAdded;
+            coinsRepository.ItemRemove += RepositoryOnCoinRemove;
+            banknotesRepository.ItemAdded += RepositoryOnBanknoteAdded;
+            banknotesRepository.ItemRemove += RepositoryOnBanknoteRemove;
 
-            static void RepositoryOnItemAdded(object? sender, Numismatics e)
+            static void RepositoryOnCoinAdded(object? sender, Coins e)
             {
                 Console.ForegroundColor = ConsoleColor.DarkRed;
-                Console.WriteLine($"\nDodano numizmat: {e.Symbol} {e.Name} {e.Denomination} {e.Currency} from {sender?.GetType().Name}");
+                Console.WriteLine($"\nDodano monetę: {e.Symbol} {e.Name} {e.Denomination} {e.Currency} {e.YearOfRelease} {e.Material} {e.Diameter} {e.Weight} from {sender?.GetType().Name}");
                 Console.ResetColor();
-                SaveLogToFile($"{System.DateTime.Now};NumismaticsAdded;{e.Symbol}, {e.Name}, {e.Denomination}, {e.Currency}");
+                SaveLogToFile($"{System.DateTime.Now};Coins Added;{e.Symbol}, {e.Name}, {e.Denomination}, {e.Currency}, {e.YearOfRelease}, {e.Material}, {e.Diameter}, {e.Weight}");
             }
 
-            static void RepositoryOnItemRemove(object? sender, Numismatics e)
+            static void RepositoryOnCoinRemove(object? sender, Coins e)
             {
                 Console.ForegroundColor = ConsoleColor.DarkRed;
-                Console.WriteLine($"\nUsunięto numizmat: {e.Symbol} {e.Name} {e.Denomination} {e.Currency} from {sender?.GetType().Name}");
+                Console.WriteLine($"\nUsunięto monetę: {e.Symbol} {e.Name} {e.Denomination} {e.Currency} {e.YearOfRelease} {e.Material} {e.Diameter} {e.Weight} from {sender?.GetType().Name}");
                 Console.ResetColor();
-                SaveLogToFile($"{System.DateTime.Now};NumismaticsRemove;{e.Symbol}, {e.Name}, {e.Denomination}, {e.Currency}");
+                SaveLogToFile($"{System.DateTime.Now};Coins Remove;{e.Symbol}, {e.Name}, {e.Denomination}, {e.Currency}, {e.YearOfRelease}, {e.Material}, {e.Diameter}, {e.Weight}");
+            }
+
+            static void RepositoryOnBanknoteAdded(object? sender, Banknotes e)
+            {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
+                Console.WriteLine($"\nDodano banknot: {e.Symbol} {e.Name} {e.Denomination} {e.Currency} {e.YearOfRelease} {e.Length} {e.Width} {e.Watermark} from {sender?.GetType().Name}");
+                Console.ResetColor();
+                SaveLogToFile($"{System.DateTime.Now};Banknotes Added;{e.Symbol}, {e.Name}, {e.Denomination}, {e.Currency}, {e.YearOfRelease}, {e.Width}, {e.Length}, {e.Watermark}");
+            }
+
+            static void RepositoryOnBanknoteRemove(object? sender, Banknotes e)
+            {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
+                Console.WriteLine($"\nUsunięto banknot: {e.Symbol} {e.Name} {e.Denomination} {e.Currency} {e.YearOfRelease} {e.Length} {e.Width} {e.Watermark} from {sender?.GetType().Name}");
+                Console.ResetColor();
+                SaveLogToFile($"{System.DateTime.Now};Banknotes Remove;{e.Symbol}, {e.Name}, {e.Denomination}, {e.Currency}, {e.YearOfRelease}, {e.Length}, {e.Width}, {e.Watermark}");
             }
 
             ShowMenu();
@@ -68,9 +88,7 @@ namespace CollectorGeneric
                         diameter = diameter.Replace(".", ",");
                         weight = weight.Replace(".", ",");
 
-                        numismaticsRepository.Add(new Coins { Symbol = symbol, Name = name, Denomination = float.Parse(denomination), Currency = currency, YearOfRelease = float.Parse(yearOfRelease), Material = material, Diameter = float.Parse(diameter), Weight = float.Parse(weight) });
-                        numismaticsRepository.Save();
-
+                        coinsRepository.Add(new Coins { Symbol = symbol, Name = name, Denomination = float.Parse(denomination), Currency = currency, YearOfRelease = float.Parse(yearOfRelease), Material = material, Diameter = float.Parse(diameter), Weight = float.Parse(weight) });
                     }
                     catch (Exception e)
                     {
@@ -100,8 +118,7 @@ namespace CollectorGeneric
                         lenght = lenght.Replace(".", ",");
                         width = width.Replace(".", ",");
 
-                        numismaticsRepository.Add(new Banknotes { Symbol = symbol, Name = name, Denomination = float.Parse(denomination), Currency = currency, YearOfRelease = float.Parse(yearOfRelease), Length = float.Parse(lenght), Width = float.Parse(width), Watermark = watermark });
-                        numismaticsRepository.Save();
+                        banknotesRepository.Add(new Banknotes { Symbol = symbol, Name = name, Denomination = float.Parse(denomination), Currency = currency, YearOfRelease = float.Parse(yearOfRelease), Length = float.Parse(lenght), Width = float.Parse(width), Watermark = watermark });
                     }
                     catch (Exception e)
                     {
@@ -111,15 +128,17 @@ namespace CollectorGeneric
                 else if (choice == "3")
                 {
                     ShowMenu();
-                    ShowRepo(numismaticsRepository);
+
+                    WriteAllToConsole(coinsRepository);
+                    WriteAllToConsole(banknotesRepository);
+                    //ShowRepo(numismaticsRepository);
                     Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine("\nPodaj numer Id numizmatu, który chcesz usunąć z kolekcji:\n");
 
                     try
                     {
                         Console.ResetColor(); var symbol = GetDataFromUser("ID: ");
-                        numismaticsRepository.Remove(numismaticsRepository.GetById((int)float.Parse(symbol)));
-                        numismaticsRepository.Save();
+                        //numismaticsRepository.Remove(numismaticsRepository.GetById((int)float.Parse(symbol)));
                     }
                     catch (Exception e)
                     {
@@ -133,7 +152,8 @@ namespace CollectorGeneric
                         Console.ForegroundColor = ConsoleColor.Blue;
                         Console.Write("\nZawartość Twojej kolekcji:\n\n");
                         Console.ResetColor();
-                        WriteAllToConsole(numismaticsRepository);
+                        WriteAllToConsole(coinsRepository);
+                        WriteAllToConsole(banknotesRepository);
                     }
                     catch (Exception e)
                     {
@@ -173,6 +193,8 @@ namespace CollectorGeneric
                 }
                 else if (choice == "X" || choice == "x")
                 {
+                    coinsRepository.Save();
+                    banknotesRepository.Save();
                     Environment.Exit(0);
                 }
                 else
