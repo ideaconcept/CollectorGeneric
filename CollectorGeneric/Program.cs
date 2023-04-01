@@ -6,7 +6,7 @@ namespace CollectorGeneric
 {
     internal class Program
     {
-        private const string fileName = "auditLog.txt";
+        private const string auditFileName = "auditLog.txt";
 
         private static void Main()
         {
@@ -129,16 +129,14 @@ namespace CollectorGeneric
                 {
                     ShowMenu();
 
-                    WriteAllToConsole(coinsRepository);
-                    WriteAllToConsole(banknotesRepository);
-                    //ShowRepo(numismaticsRepository);
+                    ShowRepo(coinsRepository);
                     Console.ForegroundColor = ConsoleColor.Green;
-                    Console.WriteLine("\nPodaj numer Id numizmatu, który chcesz usunąć z kolekcji:\n");
+                    Console.WriteLine("\nPodaj numer Id monety, którą chcesz usunąć z kolekcji:\n");
 
                     try
                     {
                         Console.ResetColor(); var symbol = GetDataFromUser("ID: ");
-                        //numismaticsRepository.Remove(numismaticsRepository.GetById((int)float.Parse(symbol)));
+                        coinsRepository.Remove(coinsRepository.GetById((int)float.Parse(symbol)));
                     }
                     catch (Exception e)
                     {
@@ -146,6 +144,24 @@ namespace CollectorGeneric
                     }
                 }
                 else if (choice == "4")
+                {
+                    ShowMenu();
+
+                    ShowRepo(banknotesRepository);
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine("\nPodaj numer Id banknotu, który chcesz usunąć z kolekcji:\n");
+
+                    try
+                    {
+                        Console.ResetColor(); var symbol = GetDataFromUser("ID: ");
+                        banknotesRepository.Remove(banknotesRepository.GetById((int)float.Parse(symbol)));
+                    }
+                    catch (Exception e)
+                    {
+                        ShowBug("Wprowadzono złą wartość identyfikatora Id.\n");
+                    }
+                }
+                else if (choice == "5")
                 {
                     try
                     {
@@ -160,14 +176,14 @@ namespace CollectorGeneric
                         ShowBug(e.Message);
                     }
                 }
-                else if (choice == "5")
+                else if (choice == "6")
                 {
                     ShowMenu();
                     try
                     {
-                        if (File.Exists(Program.fileName))
+                        if (File.Exists(Program.auditFileName))
                         {
-                            using (var reader = File.OpenText(Program.fileName))
+                            using (var reader = File.OpenText(Program.auditFileName))
                             {
                                 Console.ForegroundColor = ConsoleColor.Blue;
                                 Console.Write("\nZawartość pliku logów audytu:\n\n");
@@ -218,7 +234,7 @@ namespace CollectorGeneric
             Console.ForegroundColor = ConsoleColor.Blue;
             Console.Write("\nZawartość Twojej kolekcji:\n\n");
             Console.ForegroundColor = ConsoleColor.DarkYellow;
-            Console.WriteLine("\t{0,-4} {1,-11} {2,-35} {3,7} {4,-10} {5,8}", "Id", "Symbol", "Nazwa", "Nominał", "Waluta", "Rok wyd.", "Średnica", "Waga (g)", "Materiał");
+            Console.WriteLine("\t{0,-4} {1,-11} {2,-35} {3,7} {4,-10} {5,8}", "Id", "Symbol", "Nazwa", "Nominał", "Waluta", "Rok wyd.");
             Console.WriteLine(("\t").PadRight(83, '-'));
             Console.ResetColor();
 
@@ -226,16 +242,6 @@ namespace CollectorGeneric
             foreach (var item in items)
             {
                 Console.WriteLine("\t{0,-4} {1,-11} {2,-35} {3,7} {4,-10} {5,8}", item.Id, item.Symbol, item.Name, item.Denomination, item.Currency, item.YearOfRelease);
-
-                //<Coins> -> <Numismatics> + 
-                //material "Materiał"
-                //diameter "Średnica"
-                //weight "Waga"
-
-                //<Banknotes>  -> <Numismatics> +
-                //lenght "Długość"
-                //width "Wysokość"
-                //watermark "Znak wodny"
             }
         }
 
@@ -256,9 +262,10 @@ namespace CollectorGeneric
             Console.ResetColor();
             Console.WriteLine("   1. Dodawanie monety do kolekcji");
             Console.WriteLine("   2. Dodawanie banknotu do kolekcji");
-            Console.WriteLine("   3. Usunięcie numizmatu z kolekcji");
-            Console.WriteLine("   4. Wyświetl zasób kolekcji (repozytorium generyczne)");
-            Console.WriteLine("   5. Wyświetl zawartość plik audytu");
+            Console.WriteLine("   3. Usunięcie monety z kolekcji");
+            Console.WriteLine("   4. Usunięcie banknotu z kolekcji");
+            Console.WriteLine("   5. Wyświetl zasób kolekcji (repozytorium generyczne)");
+            Console.WriteLine("   6. Wyświetl zawartość plik audytu");
             Console.WriteLine("   X. Zakończ pracę programu");
             Console.ForegroundColor = ConsoleColor.DarkGray;
             Console.WriteLine("====================================================================");
@@ -276,7 +283,7 @@ namespace CollectorGeneric
 
         private static void SaveLogToFile(string auditLog)
         {
-            using (var writer = File.AppendText(fileName))
+            using (var writer = File.AppendText(auditFileName))
             {
                 writer.WriteLine(auditLog);
             }
