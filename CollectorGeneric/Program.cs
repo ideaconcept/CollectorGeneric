@@ -1,15 +1,15 @@
 ﻿using CollectorGeneric;
+using CollectorGeneric.DataProviders;
 using CollectorGeneric.Entities;
 using CollectorGeneric.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 
 var services = new ServiceCollection();
 services.AddSingleton<IApp, App>();
+services.AddSingleton<IRepository<Numismatics>, FileRepository<Numismatics>>();
 services.AddSingleton<IRepository<Coins>, FileRepository<Coins>>();
 services.AddSingleton<IRepository<Banknotes>, FileRepository<Banknotes>>();
-
-
-
+services.AddSingleton<INumismaticsProvider, NumismaticsProvider>();
 
 var serviceProvider = services.BuildServiceProvider();
 var app = serviceProvider.GetService<IApp>();
