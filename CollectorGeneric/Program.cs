@@ -6,9 +6,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 var services = new ServiceCollection();
 services.AddSingleton<IApp, App>();
-services.AddSingleton<IRepository<Numismatics>, FileRepository<Numismatics>>();
-services.AddSingleton<IRepository<Coins>, FileRepository<Coins>>();
-services.AddSingleton<IRepository<Banknotes>, FileRepository<Banknotes>>();
+services.AddSingleton<IRepository<Numismatics>, ListRepository<Numismatics>>();
+services.AddSingleton<IRepository<Coins>, ListRepository<Coins>>();
+services.AddSingleton<IRepository<Banknotes>, ListRepository<Banknotes>>();
 services.AddSingleton<INumismaticsProvider, NumismaticsProvider>();
 
 var serviceProvider = services.BuildServiceProvider();

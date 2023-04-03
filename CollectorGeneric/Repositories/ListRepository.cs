@@ -3,7 +3,7 @@ using System.Text.Json;
 
 namespace CollectorGeneric.Repositories
 {
-    public class FileRepository<T> : IRepository<T>
+    public class ListRepository<T> : IRepository<T>
         where T : class, IEntity, new()
     {
         protected List<T> _items = new();
