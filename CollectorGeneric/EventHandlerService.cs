@@ -19,9 +19,9 @@ namespace CollectorGeneric
         public void ListenForEvents()
         {
             _coinsRepository.ItemAdded += RepositoryOnCoinAdded;
-            _coinsRepository.ItemRemove += RepositoryOnCoinRemove;
+            _coinsRepository.ItemRemoved += RepositoryOnCoinRemove;
             _banknotesRepository.ItemAdded += RepositoryOnBanknoteAdded;
-            _banknotesRepository.ItemRemove += RepositoryOnBanknoteRemove;
+            _banknotesRepository.ItemRemoved += RepositoryOnBanknoteRemove;
         }
 
         static void RepositoryOnCoinAdded(object? sender, Coins e)

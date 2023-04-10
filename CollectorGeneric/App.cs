@@ -35,24 +35,8 @@ namespace CollectorGeneric
 
         public void Run()
         {
-            Console.OutputEncoding = Encoding.UTF8;
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.BackgroundColor = ConsoleColor.DarkMagenta;
-            Console.WriteLine("Hello to the [Football Club App] console app.\n\n");
-            Console.ResetColor();
-            Console.WriteLine("In this version of the application you can view, add, find and remove PLAYERS and OPPONENTS for:");
-            Console.ForegroundColor = ConsoleColor.DarkRed;
-            Console.BackgroundColor = ConsoleColor.Blue;
-            Console.WriteLine("----------------------------------- F C   B A R C E L O N A -----------------------------------\n");
-            Console.ResetColor();
-
-            
             _eventHandlerService.ListenForEvents();
             _userCommunication.SelectAMenuOption();
-
-
-
-
 
             //    var lista = AddCoins();
             //    foreach (var coin in lista)

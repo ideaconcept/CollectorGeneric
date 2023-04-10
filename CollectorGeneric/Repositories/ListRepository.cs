@@ -8,7 +8,7 @@ namespace CollectorGeneric.Repositories
     {
         protected List<T> _items = new();
 
-        public event EventHandler<T>? ItemAdded, ItemRemove;
+        public event EventHandler<T>? ItemAdded, ItemRemoved;
 
         public void LoadRepository()
         {
@@ -35,7 +35,7 @@ namespace CollectorGeneric.Repositories
         public void Remove(T item)
         {
             _items.Remove(item);
-            ItemRemove?.Invoke(this, item);
+            ItemRemoved?.Invoke(this, item);
         }
 
         public void Save()
