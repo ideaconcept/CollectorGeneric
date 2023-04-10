@@ -6,6 +6,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 var services = new ServiceCollection();
 services.AddSingleton<IApp, App>();
+services.AddSingleton<IUserCommunication, UserCommunication>();
+services.AddSingleton<IEventHandlerService, EventHandlerService>();
+
 services.AddSingleton<IRepository<Numismatics>, ListRepository<Numismatics>>();
 services.AddSingleton<IRepository<Coins>, ListRepository<Coins>>();
 services.AddSingleton<IRepository<Banknotes>, ListRepository<Banknotes>>();
@@ -13,6 +16,7 @@ services.AddSingleton<INumismaticsProvider, NumismaticsProvider>();
 
 var serviceProvider = services.BuildServiceProvider();
 var app = serviceProvider.GetService<IApp>();
+
 app.Run();
 
 
@@ -35,6 +39,10 @@ app.Run();
 //            var banknotesRepository = new FileRepository<Banknotes>();
 //            coinsRepository.LoadRepository();
 //            banknotesRepository.LoadRepository();
+
+
+
+
 //            coinsRepository.ItemAdded += RepositoryOnCoinAdded;
 //            coinsRepository.ItemRemove += RepositoryOnCoinRemove;
 //            banknotesRepository.ItemAdded += RepositoryOnBanknoteAdded;
@@ -71,6 +79,9 @@ app.Run();
 //                Console.ResetColor();
 //                SaveLogToFile($"{System.DateTime.Now};Banknotes Remove;{e.Symbol}, {e.Name}, {e.Denomination}, {e.Currency}, {e.YearOfRelease}, {e.Length}, {e.Width}, {e.Watermark}");
 //            }
+
+
+
 
 //            ShowMenu();
 

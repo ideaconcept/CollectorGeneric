@@ -30,6 +30,6 @@ namespace CollectorGeneric.DataProviders
 
         List<Coins> WhereStartsWithAndDenominationIsGreaterThan(string prefix, float denomination);
         
-        List<Coins> WhereCurrency(string currency); 
+        List<Coins> WhereCurrencyIs(string currency); 
     }
 }

@@ -1,4 +1,5 @@
-﻿using CollectorGeneric.Entities;
+﻿using CollectorGeneric.DataProviders.Extensions;
+using CollectorGeneric.Entities;
 using CollectorGeneric.Repositories;
 using System.Data.Common;
 using System.Text;
@@ -99,9 +100,10 @@ namespace CollectorGeneric.DataProviders
             return coins.OrderByDescending(x => x.Name).ToList();
         }
 
-        public List<Coins> WhereCurrency(string currency)
+        public List<Coins> WhereCurrencyIs(string currency)
         {
-            throw new NotImplementedException();
+            var coins = _coinsRepository.GetAll();
+            return coins.ByCurrency("Złotych").ToList();
         }
 
         public List<Coins> WhereStartsWith(string prefix)
