@@ -18,29 +18,3 @@ var serviceProvider = services.BuildServiceProvider();
 var app = serviceProvider.GetService<IApp>();
 
 app.Run();
-
-
-
-
-//using CollectorGeneric.Data;
-//using CollectorGeneric.Entities;
-//using CollectorGeneric.Repositories;
-
-//namespace CollectorGeneric
-//{
-//    internal class Program
-//    {
-//        private const string auditFileName = "auditLog.txt";
-
-//        private static void Main()
-//        {
-//            //var numismaticsRepository = new SqlRepository<Numismatics>(new CollectorGenericDbContext());
-//            var coinsRepository = new FileRepository<Coins>();
-//            var banknotesRepository = new FileRepository<Banknotes>();
-//            coinsRepository.LoadRepository();
-//            banknotesRepository.LoadRepository();
-//        }
-//    }
-//}
-
-

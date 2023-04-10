@@ -8,5 +8,7 @@ namespace CollectorGeneric.Repositories
     {
         public event EventHandler<T>? ItemAdded;
         public event EventHandler<T>? ItemRemoved;
+
+        void LoadRepository();
     }
 }

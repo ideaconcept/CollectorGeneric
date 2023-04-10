@@ -43,5 +43,10 @@ namespace CollectorGeneric.Repositories
         {
             _dbContext.SaveChanges();
         }
+
+        public void LoadRepository()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using CollectorGeneric.DataProviders;
+using CollectorGeneric.Data;
 using CollectorGeneric.Entities;
 using CollectorGeneric.Repositories;
 
@@ -23,11 +24,14 @@ namespace CollectorGeneric
             _coinsRepository = coinsRepository;
             _banknotesRepository = banknotesRepository;
             _numismaticsProvider = numismaticsProvider;
+
+            //var numismaticsRepository = new SqlRepository<Numismatics>(new CollectorGenericDbContext());
+            _coinsRepository.LoadRepository();
+            _banknotesRepository.LoadRepository();
         }
 
         public void SelectAMenuOption()
         {
-            bool CloseApp = false;
             ShowMenu();
 
             while (true)
@@ -215,45 +219,6 @@ namespace CollectorGeneric
             Console.ForegroundColor = ConsoleColor.DarkGray;
             Console.WriteLine("====================================================================");
             Console.ResetColor();
-        }
-        private static void ShowBug(string bug)
-        {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"\nWystąpił błąd: {bug}");
-            Console.ResetColor();
-        }
-        static void WriteAllToConsole(IReadRepository<IEntity> repository)
-        {
-            var items = repository.GetAll();
-            foreach (var item in items)
-            {
-                Console.WriteLine(item);
-            }
-        }
-
-        static void ShowRepo(IReadRepository<Numismatics> repository)
-        {
-            Console.ForegroundColor = ConsoleColor.Blue;
-            Console.Write("\nZawartość Twojej kolekcji:\n\n");
-            Console.ForegroundColor = ConsoleColor.DarkYellow;
-            Console.WriteLine("\t{0,-4} {1,-11} {2,-35} {3,7} {4,-10} {5,8}", "Id", "Symbol", "Nazwa", "Nominał", "Waluta", "Rok wyd.");
-            Console.WriteLine(("\t").PadRight(83, '-'));
-            Console.ResetColor();
-
-            var items = repository.GetAll();
-            foreach (var item in items)
-            {
-                Console.WriteLine("\t{0,-4} {1,-11} {2,-35} {3,7} {4,-10} {5,8}", item.Id, item.Symbol, item.Name, item.Denomination, item.Currency, item.YearOfRelease);
-            }
-        }
-
-        private static string? GetDataFromUser(string message)
-        {
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.Write(message);
-            Console.ForegroundColor = ConsoleColor.Gray;
-            string userInput = Console.ReadLine();
-            return userInput;
         }
     }
 }
