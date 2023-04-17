@@ -2,6 +2,7 @@
 using CollectorGeneric.Data;
 using CollectorGeneric.Entities;
 using CollectorGeneric.Repositories;
+using System.Xml.Linq;
 
 namespace CollectorGeneric
 {
@@ -187,6 +188,91 @@ namespace CollectorGeneric
                         ShowBug(e.Message);
                     }
                 }
+                else if (choice == "7")
+                {
+                    ShowMenu();
+                    try
+                    {
+                        Console.ForegroundColor = ConsoleColor.Blue;
+                        Console.WriteLine("\nNajniższa wartość monety w Twojej kolekcji wynosi:\n");
+                        Console.ResetColor();
+                        var value = _numismaticsProvider.GetMinDenominationOfAllNumismatics();
+                        Console.WriteLine($" {value}\n");
+                    }
+                    catch (Exception e)
+                    {
+                        ShowBug(e.Message);
+                    }
+                }
+                else if (choice == "8")
+                {
+                    ShowMenu();
+                    try
+                    {
+                        Console.ForegroundColor = ConsoleColor.Blue;
+                        Console.WriteLine("\nW Twojej kolekcji występują następujące waluty:\n");
+                        Console.ResetColor();
+
+                        foreach (var currency in _numismaticsProvider.GetUniqueCurrency())
+                        {
+                            Console.WriteLine(currency);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        ShowBug(e.Message);
+                    }
+                }
+                else if (choice == "9")
+                {
+                    ShowMenu();
+                    try
+                    {
+                        var parameter = GetDataFromUser("Podaj minimalną wartość monety: ");
+                        Console.ResetColor();
+
+                        parameter = parameter?.Replace(".", ",");
+
+                        Console.ForegroundColor = ConsoleColor.Blue;
+                        Console.WriteLine($"\nZawartość Twojej kolekcji monet o wartości większej lub równej {parameter}:\n\n");
+                        Console.ForegroundColor = ConsoleColor.DarkYellow;
+                        Console.WriteLine("\t{0,-4} {1,-11} {2,-35} {3,7} {4,-10} {5,8}", "Id", "Symbol", "Nazwa", "Nominał", "Waluta", "Rok wyd.");
+                        Console.WriteLine(("\t").PadRight(83, '-'));
+                        Console.ResetColor();
+
+                        foreach (var coins in _numismaticsProvider.FilterNumismatics(float.Parse(parameter)))
+                        {
+                            Console.WriteLine("\t{0,-4} {1,-11} {2,-35} {3,7} {4,-10} {5,8}", coins.Id, coins.Symbol, coins.Name, coins.Denomination, coins.Currency, coins.YearOfRelease);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        ShowBug(e.Message);
+                    }
+                }
+                else if (choice == "10")
+                {
+                    ShowMenu();
+                    try
+                    {
+                        Console.ForegroundColor = ConsoleColor.Blue;
+                        Console.Write("\nZawartość Twojej kolekcji monet posortowanej rosnąco wg wartości oraz waluty:\n\n");
+                        Console.ForegroundColor = ConsoleColor.DarkYellow;
+                        Console.WriteLine("\t{0,-4} {1,-11} {2,-35} {3,7} {4,-10} {5,8}", "Id", "Symbol", "Nazwa", "Nominał", "Waluta", "Rok wyd.");
+                        Console.WriteLine(("\t").PadRight(83, '-'));
+                        Console.ResetColor();
+
+                        foreach (var coins in _numismaticsProvider.OrderByCurrencyAndDenomination())
+                        {
+                            //Console.WriteLine(coins);
+                            Console.WriteLine("\t{0,-4} {1,-11} {2,-35} {3,7} {4,-10} {5,8}", coins.Id, coins.Symbol, coins.Name, coins.Denomination, coins.Currency, coins.YearOfRelease);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        ShowBug(e.Message);
+                    }
+                }
                 else if (choice == "X" || choice == "x")
                 {
                     _coinsRepository.Save();
@@ -198,16 +284,16 @@ namespace CollectorGeneric
                     ShowBug("Wprowadzono złą wartość.\n");
                 }
             }
-
         }
 
         private static void ShowMenu()
         {
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.Blue;
-            Console.WriteLine("          Witamy w programie Kolekcjoner 'Generic' (InFile):");
+            Console.WriteLine("               Witamy w programie Kolekcjoner 'Generic'");
+            Console.WriteLine("                   (Dependency Injection + InFile)");
             Console.ForegroundColor = ConsoleColor.DarkGray;
-            Console.WriteLine("====================================================================");
+            Console.WriteLine("=========================================================================");
             Console.ResetColor();
             Console.WriteLine("   1. Dodawanie monety do kolekcji");
             Console.WriteLine("   2. Dodawanie banknotu do kolekcji");
@@ -215,9 +301,13 @@ namespace CollectorGeneric
             Console.WriteLine("   4. Usunięcie banknotu z kolekcji");
             Console.WriteLine("   5. Wyświetl zasób kolekcji (repozytorium generyczne)");
             Console.WriteLine("   6. Wyświetl zawartość plik audytu");
+            Console.WriteLine("   7. Najniższa wartość monety w Twojej kolekcji");
+            Console.WriteLine("   8. Wykaz walut występujących w kolekcji");
+            Console.WriteLine("   9. Wykaz kolekcji monet o wartości równej lub wyższej niż zadana");
+            Console.WriteLine("   10. Wykaz kolekcji monet posortowanej wg wartości oraz waluty");
             Console.WriteLine("   X. Zakończ pracę programu");
             Console.ForegroundColor = ConsoleColor.DarkGray;
-            Console.WriteLine("====================================================================");
+            Console.WriteLine("=========================================================================");
             Console.ResetColor();
         }
     }
