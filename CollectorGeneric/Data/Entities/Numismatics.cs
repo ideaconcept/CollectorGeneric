@@ -1,4 +1,4 @@
-﻿namespace CollectorGeneric.Entities
+﻿namespace CollectorGeneric.Data.Entities
 {
     public class Numismatics : EntityBase
     {

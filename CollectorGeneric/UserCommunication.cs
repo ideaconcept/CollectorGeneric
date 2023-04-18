@@ -1,8 +1,8 @@
-﻿using CollectorGeneric.DataProviders;
-using CollectorGeneric.Data;
-using CollectorGeneric.Entities;
-using CollectorGeneric.Repositories;
+﻿using CollectorGeneric.Data;
 using System.Xml.Linq;
+using CollectorGeneric.Components.DataProviders;
+using CollectorGeneric.Data.Entities;
+using CollectorGeneric.Data.Repositories;
 
 namespace CollectorGeneric
 {

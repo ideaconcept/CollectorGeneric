@@ -1,6 +1,6 @@
-﻿using CollectorGeneric.Entities;
+﻿using CollectorGeneric.Data.Entities;
 
-namespace CollectorGeneric.DataProviders.Extensions
+namespace CollectorGeneric.Components.DataProviders.Extensions
 {
     public static class CoinsHelper
     {

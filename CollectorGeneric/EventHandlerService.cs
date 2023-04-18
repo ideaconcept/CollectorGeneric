@@ -1,5 +1,5 @@
-﻿using CollectorGeneric.Entities;
-using CollectorGeneric.Repositories;
+﻿using CollectorGeneric.Data.Entities;
+using CollectorGeneric.Data.Repositories;
 
 namespace CollectorGeneric
 {

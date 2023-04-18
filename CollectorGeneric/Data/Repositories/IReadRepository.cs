@@ -1,7 +1,6 @@
-﻿using CollectorGeneric.Entities;
-using CollectorGeneric.Repositories;
+﻿using CollectorGeneric.Data.Entities;
 
-namespace CollectorGeneric.Repositories
+namespace CollectorGeneric.Data.Repositories
 {
     public interface IReadRepository<out T>
         where T : class, IEntity

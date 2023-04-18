@@ -1,10 +1,10 @@
-﻿using CollectorGeneric.DataProviders.Extensions;
-using CollectorGeneric.Entities;
-using CollectorGeneric.Repositories;
+﻿using CollectorGeneric.Components.DataProviders.Extensions;
+using CollectorGeneric.Data.Entities;
+using CollectorGeneric.Data.Repositories;
 using System.Data.Common;
 using System.Text;
 
-namespace CollectorGeneric.DataProviders
+namespace CollectorGeneric.Components.DataProviders
 {
     public class NumismaticsProvider : INumismaticsProvider
     {
@@ -26,7 +26,7 @@ namespace CollectorGeneric.DataProviders
                 Nazwa = coins.Name
             });
 
-            StringBuilder sb = new (2048);
+            StringBuilder sb = new(2048);
             foreach (var coin in list)
             {
                 sb.AppendLine($"Identyfikator monety: {coin.Identyfikator}");
@@ -55,12 +55,12 @@ namespace CollectorGeneric.DataProviders
         {
             var coins = _coinsRepository.GetAll();
             var list = coins.Select(coins => new Coins
-                {
-                    Id = coins.Id,
-                    Symbol = coins.Symbol,
-                    Name = coins.Name,
-                }).ToList();
-            
+            {
+                Id = coins.Id,
+                Symbol = coins.Symbol,
+                Name = coins.Name,
+            }).ToList();
+
             return list;
         }
 

@@ -1,7 +1,7 @@
-﻿using CollectorGeneric.Entities;
+﻿using CollectorGeneric.Data.Entities;
 using System.Text.Json;
 
-namespace CollectorGeneric.Repositories
+namespace CollectorGeneric.Data.Repositories
 {
     public class ListRepository<T> : IRepository<T>
         where T : class, IEntity, new()
@@ -40,7 +40,7 @@ namespace CollectorGeneric.Repositories
 
         public void Save()
         {
-            SaveRepoToFile<T>(_items);
+            SaveRepoToFile(_items);
         }
 
         List<T> ReadRepoFromFile<T>()
@@ -75,11 +75,11 @@ namespace CollectorGeneric.Repositories
 
             using (var writer = File.CreateText(fileName))
             {
-                int itemCount = this._items.Count;
+                int itemCount = _items.Count;
                 for (int i = 0; i < itemCount; i++)
                 {
                     T item = items[i];
-                    string jsonObj = JsonSerializer.Serialize<T>(item);
+                    string jsonObj = JsonSerializer.Serialize(item);
                     writer.WriteLine(jsonObj);
                 }
             }

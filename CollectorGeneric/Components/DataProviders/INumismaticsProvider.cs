@@ -1,6 +1,7 @@
-﻿using CollectorGeneric.Entities;
+﻿using CollectorGeneric.Data.Entities;
+using CollectorGeneric.Data.Repositories;
 
-namespace CollectorGeneric.DataProviders
+namespace CollectorGeneric.Components.DataProviders
 {
     public interface INumismaticsProvider
     {
@@ -29,7 +30,7 @@ namespace CollectorGeneric.DataProviders
         List<Coins> WhereStartsWith(string prefix);
 
         List<Coins> WhereStartsWithAndDenominationIsGreaterThan(string prefix, float denomination);
-        
-        List<Coins> WhereCurrencyIs(string currency); 
+
+        List<Coins> WhereCurrencyIs(string currency);
     }
 }

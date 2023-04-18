@@ -1,6 +1,6 @@
-﻿using CollectorGeneric.DataProviders;
-using CollectorGeneric.Entities;
-using CollectorGeneric.Repositories;
+﻿using CollectorGeneric.Components.DataProviders;
+using CollectorGeneric.Data.Entities;
+using CollectorGeneric.Data.Repositories;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -27,4 +27,3 @@ namespace CollectorGeneric
         }
     }
 }
-

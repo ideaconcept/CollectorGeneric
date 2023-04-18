@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using CollectorGeneric.Entities;
+using CollectorGeneric.Data.Entities;
 
 namespace CollectorGeneric.Data
 {

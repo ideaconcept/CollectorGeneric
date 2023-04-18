@@ -1,7 +1,7 @@
-﻿using CollectorGeneric.Entities;
+﻿using CollectorGeneric.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace CollectorGeneric.Repositories
+namespace CollectorGeneric.Data.Repositories
 {
     public class SqlRepository<T> : IRepository<T>
         where T : class, IEntity, new()
@@ -10,12 +10,12 @@ namespace CollectorGeneric.Repositories
         private readonly DbContext _dbContext;
 
         public event EventHandler<T>? ItemAdded, ItemRemoved;
-        
+
         public SqlRepository(DbContext dbContext)
         {
             _dbContext = dbContext;
             _dbSet = _dbContext.Set<T>();
-        }      
+        }
 
         public IEnumerable<T> GetAll()
         {
